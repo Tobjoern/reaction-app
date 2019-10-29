@@ -1,0 +1,191 @@
+import * as socketio from 'socket.io';
+import { GameService } from '../services/Game.service';
+
+
+export function setupSocket(io: socketio.Server) {
+
+
+
+    io.use(((socket, next) => {
+        const gameId = socket.handshake.query ? parseInt(socket.handshake.query.gameId, 0) : null;
+        console.log(`Gamed Id ${gameId}`)
+
+        const gs = GameService.getInstance()
+
+        let game = gs.getGameById(gameId);
+
+        let gm = gs.getGameManagerById(gameId)
+
+        if (!game || !gm) {
+            next(new Error('Game not found!'))
+        } else if (game.isFull) {
+            next(new Error('Game is full!'))
+        } else {
+            (socket as any).gameId = gameId
+            next()
+        }
+
+    })).on('connect', (socket) => {
+        const gs = GameService.getInstance();
+        const gameId = (socket as any).gameId;
+
+        let gm = gs.getGameManagerById(gameId)
+
+        gm.onConnect(socket);
+
+
+
+
+
+        // const roomName = `game-${gameId}`
+
+        // let game = gs.getGameById(gameId);
+        // let isHost = true;
+
+        // const neededPointsToWin = Math.ceil(game.bestOf / 2)
+
+        // function sendToRoom(type: string, payload?: object) {
+        //     io.in(roomName).emit(type, payload ? payload : {
+        //         game: gs.getGameById(gameId)
+        //     })
+        // }
+
+        // function startRound() {
+        //     gs.updateGame({
+        //         state: GameState.roundStarted
+        //     }, gameId);
+
+        //     sendToRoom('updateGame')
+
+        //     const toWait = 2000 + Math.floor(Math.random() * 9000)
+
+        //     setTimeout(() => {
+        //         gs.updateGame({
+        //             state: GameState.requestingClicks
+        //         }, gameId);
+
+        //         sendToRoom('updateGame')
+
+        //     }, toWait)
+        // }
+
+        // function getOtherPlayer() {
+        //     game = gs.getGameById(gameId);
+        //     return isHost ? game.players.find(p => !p.isHost) : game.players.find(p => p.isHost)
+        // }
+
+        // function getOwnPlayer() {
+        //     game = gs.getGameById(gameId);
+        //     return !isHost ? game.players.find(p => !p.isHost) : game.players.find(p => p.isHost)
+        // }
+
+        // socket.on('clicked', (data) => {
+        //     const reactionTime = data.reactionTime;
+
+        //     const otherPlayer = getOtherPlayer();
+        //     let ownPlayer = getOwnPlayer();
+
+
+        //     if (otherPlayer.thisReactionTime) {
+        //         gs.updateGame({
+        //             players: [
+        //                 otherPlayer,
+        //                 {
+        //                     ...ownPlayer,
+        //                     thisReactionTime: reactionTime
+        //                 }
+        //             ]
+        //         }, gameId);
+        //         // end round
+
+        //         ownPlayer = getOwnPlayer()
+        //         if (ownPlayer.thisReactionTime > otherPlayer.thisReactionTime) {
+        //             otherPlayer.score++;
+        //         } else {
+        //             ownPlayer.score++
+        //         }
+
+        //         gs.updateGame({
+        //             players: [
+        //                 {
+        //                     ...ownPlayer,
+        //                     lastReactionTime: ownPlayer.thisReactionTime,
+        //                     thisReactionTime: null
+        //                 },
+        //                 {
+        //                     ...otherPlayer,
+        //                     lastReactionTime: otherPlayer.thisReactionTime,
+        //                     thisReactionTime: null
+        //                 },
+        //             ]
+        //         }, gameId);
+
+        //         game = gs.getGameById(gameId);
+        //         if (ownPlayer.score >= neededPointsToWin || otherPlayer.score >= neededPointsToWin) {
+        //             gs.updateGame({
+        //                 state: GameState.gameResult
+        //             }, gameId);
+        //             sendToRoom('gameEnded')
+        //             // TODO: disconnect
+        //         } else {
+        //             sendToRoom('roundEnded')
+        //             setTimeout(startRound, 2000)
+        //         }
+
+        //     } else {
+        //         gs.updateGame({
+        //             players: [
+        //                 otherPlayer,
+        //                 {
+        //                     ...ownPlayer,
+        //                     thisReactionTime: reactionTime
+        //                 }
+        //             ]
+        //         }, gameId);
+        //     }
+        // })
+
+        // socket.join(roomName, (err) => {
+        //     console.log('Joined the room!')
+        //     if (err) {
+        //         throw new Error('Could not join room!')
+        //     }
+
+        //     if (game.hostJoined) {
+        //         isHost = false;
+
+        //         game = gs.getGameById(gameId);
+        //         gs.updateGame({
+        //             isFull: true,
+        //             players: [
+        //                 game.players[0],
+        //                 {
+        //                     lastReactionTime: null,
+        //                     thisReactionTime: null,
+        //                     name: 'Guest',
+        //                     score: 0,
+        //                     isHost: false,
+        //                     reactionTimes: []
+        //                 }
+        //             ],
+        //             state: GameState.waitingForRound
+        //         }, gameId);
+        //         sendToRoom('guestJoined')
+
+        //         setTimeout(startRound, 3000)
+        //     } else {
+        //         gs.updateGame({
+        //             hostJoined: true,
+        //             state: GameState.waitingForPlayers
+        //         }, gameId)
+        //         sendToRoom('updateGame')
+        //         sendToRoom('areHost', {})
+        //     }
+
+        // })
+
+    })
+
+}
+
+
