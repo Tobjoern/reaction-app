@@ -9,7 +9,7 @@ import * as socketio from 'socket.io';
 import { setupSocket } from "./socket";
 import { GameService } from "./services/Game.service";
 const cors = require('cors')
-const path = require('path')
+import path from 'path';
 
 var corsOptions = {
   origin: function (origin, callback) {
@@ -71,7 +71,7 @@ if (!inProd) {
 
     if (inProd) {
         app.get('*', (req, res) => {
-            res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+            res.sendFile(path.resolve(path.join(__dirname, '../client/build/index.html')))
         })
     }
 
