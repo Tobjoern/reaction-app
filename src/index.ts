@@ -71,8 +71,10 @@ if (!inProd) {
     });
 
     if (inProd) {
+        const buildRoot = path.join(__dirname, '../client/build');
+        app.use(express.static(buildRoot))
         app.get('*', (req, res) => {
-            res.sendFile(path.resolve(path.join(__dirname, '../client/build/index.html')))
+            res.sendFile('index.html', { root: buildRoot })
         })
     }
 
