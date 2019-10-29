@@ -9,7 +9,8 @@ import * as socketio from 'socket.io';
 import { setupSocket } from "./socket";
 import { GameService } from "./services/Game.service";
 const cors = require('cors')
-import path from 'path';
+import * as path from 'path';
+
 
 var corsOptions = {
   origin: function (origin, callback) {
