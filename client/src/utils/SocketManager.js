@@ -1,22 +1,6 @@
 import * as io from 'socket.io-client';
 import { EndpointManager } from './EndpointManager';
 
-
-// export class SocketManager {
-//     constructor(hoehe, breite) {
-//         this.hoehe = hoehe;
-//         this.breite = breite;
-//     }
-
-//     get flaeche() {
-//         return this.berechneFlaeche();
-//     }
-
-//     berechneFlaeche() {
-//         return this.hoehe * this.breite;
-//     }
-// }
-
 export class SocketManager {
 
     gameSocket;

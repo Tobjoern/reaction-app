@@ -13,7 +13,7 @@ export default function EndModal(props) {
     }
 
     const handleOk = () => {
-        alert('The re-match has yet to be implemented!')
+        alert('The re-match feature has yet to be implemented!')
     }
 
     // on-fence -> one clicked

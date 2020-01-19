@@ -78,6 +78,7 @@ class Game extends Component {
             const error = payload.reason;
 
             // bad practice prompt, to save time, but it will block execution context, so setTimeout, so it can render once
+            // TODO: It would be better to make a modal.
             setTimeout(() => {
                 const username = prompt('Please enter you user Name.' + (error ? ' ' + error : ''));
                 this.socket.emitToGame('updateName', {

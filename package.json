@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --delay 1500ms --exec ts-node ./src/index.ts",
+    "server-dev": "nodemon --delay 1500ms --exec ts-node ./src/index.ts",
+    "client-dev": "npm start --prefix client",
+    "client-install": "npm i --prefix client",
     "start": "ts-node ./src/index.ts",
     "build": "tsc",
     "client": "npm start --prefix front",

@@ -38,8 +38,6 @@ if (!inProd) {
 
 
 
-
-
 (async function () {
     if (!inProd) {
         await killPorts();
@@ -79,7 +77,7 @@ if (!inProd) {
     }
 
    httpServer.listen(port, () => {
-       console.log('Socket listening!')
+       console.log(`Server listening on ${port}!`)
    })
 })();
 

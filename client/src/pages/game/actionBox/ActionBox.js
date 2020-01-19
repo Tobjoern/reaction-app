@@ -67,7 +67,7 @@ export default function ActionBox(props) {
             break;
         case 'roundStarted':
             toRender = <div className='action-box waiting' onClick={clickReactionTime}>
-                <span className='heading'>Wait for thes green light...</span>
+                <span className='heading'>Wait for the green light...</span>
             </div>
             break;
         case 'requestingClicks':
